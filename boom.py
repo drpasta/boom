@@ -1,13 +1,33 @@
 from pynput import mouse
 from playsound import playsound
-import threading
+from threading import Thread
+from argparse import ArgumentParser
 
+class Boom:
+    def __init__(self):
+        self.args = ArgumentParser()
+        self.args.add_argument('-r', '--rock', help='We Stay Hungry', action='store_true', default=False)
+        self.args = self.args.parse_args()
 
-def on_click(x, y, button, pressed):
-    if pressed:
-        threading.Thread(target=playsound, args=(
-            'boom.mp3',), daemon=True).start()
+        if self.args.rock:
+            self.clips = ['Face-Off/ItsAboutDrive.mp3', 'Face-Off/ItsAboutPower.mp3', 'Face-Off/WeStayHungry.mp3', 'Face-Off/WeDevour.mp3', 'Face-Off/PutInTheWork.mp3', 'Face-Off/PutInTheHours.mp3', 'Face-Off/ToTakeWhatsOurs.mp3']
+        else:
+            self.clips = ['boom.mp3']
+        
+        self.increment = 0
 
+    def clip(self):
+        file = self.clips[self.increment]
+        self.increment = (self.increment + 1) % len(self.clips)
+        return file
 
-with mouse.Listener(on_click=on_click) as listener:
-    listener.join()
+    def run(self):
+        with mouse.Listener(on_click=self.on_click) as listener:
+            listener.join()
+
+    def on_click(self,x, y, button, pressed):
+        if pressed:
+            Thread(target=playsound, args=(self.clip(),), daemon=True).start()
+
+Boom().run()
+
