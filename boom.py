@@ -3,6 +3,7 @@ from playsound import playsound
 from threading import Thread
 from argparse import ArgumentParser
 from sys import path
+from os import chdir
 
 class Boom:
     def __init__(self):
@@ -15,6 +16,8 @@ class Boom:
         else:
             self.clips = ['boom.mp3']
         
+        chdir(path[0])
+
         self.increment = 0
 
     def clip(self):
