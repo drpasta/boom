@@ -2,6 +2,7 @@ from pynput import mouse
 from playsound import playsound
 from threading import Thread
 from argparse import ArgumentParser
+from sys import path
 
 class Boom:
     def __init__(self):
